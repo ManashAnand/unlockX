@@ -1,0 +1,75 @@
+:root {
+  --bg-base:        #07070c;
+  --bg-elevated:    #0d0d14;
+  --bg-card:        #12121b;
+  --bg-card-hover:  #181822;
+  --bg-input:       #0a0a12;
+  --bg-overlay:     rgba(8,8,14,0.72);
+
+  --stroke-faint:   rgba(255,255,255,0.05);
+  --stroke-soft:    rgba(255,255,255,0.08);
+  --stroke-default: rgba(255,255,255,0.12);
+  --stroke-strong:  rgba(255,255,255,0.20);
+
+  --text-primary:   #f3f3f7;
+  --text-secondary: #a3a3b0;
+  --text-tertiary:  #6a6a78;
+  --text-muted:     #44444f;
+  --text-on-accent: #07070c;
+
+  --accent:         #7c7cff;
+  --accent-hover:   #9090ff;
+  --accent-soft:    rgba(124,124,255,0.12);
+  --accent-ring:    rgba(124,124,255,0.35);
+  --accent-glow:    rgba(124,124,255,0.40);
+
+  --player-a:       #7c7cff;
+  --player-a-soft:  rgba(124,124,255,0.10);
+  --player-a-glow:  rgba(124,124,255,0.45);
+  --player-a-edge:  rgba(124,124,255,0.55);
+
+  --player-b:       #ff7c4d;
+  --player-b-soft:  rgba(255,124,77,0.10);
+  --player-b-glow:  rgba(255,124,77,0.45);
+  --player-b-edge:  rgba(255,124,77,0.55);
+
+  --success:        #4ade80;
+  --success-soft:   rgba(74,222,128,0.12);
+  --warning:        #facc15;
+  --warning-soft:   rgba(250,204,21,0.12);
+  --danger:         #f87171;
+  --danger-soft:    rgba(248,113,113,0.12);
+
+  --font-sans: 'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Geist Mono', 'JetBrains Mono', ui-monospace, monospace;
+
+  --fs-xs:   11px; --fs-sm:  13px; --fs-base: 15px; --fs-md:  17px;
+  --fs-lg:   20px; --fs-xl:  28px; --fs-2xl:  40px; --fs-3xl: 56px; --fs-4xl: 80px;
+
+  --r-xs: 4px; --r-sm: 8px; --r-md: 12px; --r-lg: 18px; --r-xl: 24px; --r-pill: 999px;
+
+  --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:20px; --s-6:24px;
+  --s-8:32px; --s-10:40px; --s-12:48px; --s-16:64px; --s-20:80px;
+
+  --shadow-card: inset 0 1px 0 rgba(255,255,255,0.04), 0 20px 50px -24px rgba(0,0,0,0.7);
+  --shadow-hover: inset 0 1px 0 rgba(255,255,255,0.06), 0 24px 60px -20px rgba(0,0,0,0.8);
+
+  --glow-a:      0 0 80px -20px var(--player-a-glow);
+  --glow-b:      0 0 80px -20px var(--player-b-glow);
+  --glow-accent: 0 0 60px -10px var(--accent-glow);
+
+  --ease-out:    cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast:    140ms; --dur-base: 240ms; --dur-slow: 480ms; --dur-slower: 900ms;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--fs-base);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
