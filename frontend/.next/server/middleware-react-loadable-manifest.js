@@ -1,1 +1,0 @@
-self.__REACT_LOADABLE_MANIFEST="{\"app/page.tsx -> @/components/GridScan\":{\"id\":\"app/page.tsx -> @/components/GridScan\",\"files\":[\"static/css/_app-pages-browser_src_components_GridScan_jsx.css\",\"static/chunks/_app-pages-browser_src_components_GridScan_jsx.js\"]}}"
