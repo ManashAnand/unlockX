@@ -38,7 +38,7 @@ export default function Nav() {
       <div className="mx-auto flex max-w-[1320px] items-center justify-between px-8 py-3 max-md:px-4">
         {/* Logo */}
         <a href="/" className="flex items-center gap-2.5">
-          <img src="/image.png" alt="UnlockX" width={36} height={36} style={{ objectFit: 'contain' }} />
+          <img src="/image.png" alt="UnlockX" width={44} height={44} style={{ objectFit: 'contain', display: 'block' }} />
           <span className="font-sans text-lg font-semibold tracking-tight text-primary">
             Unlock
             <span style={{

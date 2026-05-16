@@ -17,9 +17,9 @@ export default function LoginPage() {
       <div className="relative z-10 w-full max-w-sm px-6">
         {/* Logo */}
         <div className="mb-10 text-center">
-          <div className="flex items-center justify-center gap-3 mb-2">
-            <img src="/image.png" alt="UnlockX" width={40} height={40} />
-            <p className="font-sans text-2xl font-semibold tracking-tight text-primary">
+          <div className="flex flex-col items-center gap-3 mb-2">
+            <img src="/image.png" alt="UnlockX" width={72} height={72} style={{ objectFit: 'contain' }} />
+            <p className="font-sans text-3xl font-semibold tracking-tight text-primary">
               Unlock
               <span style={{
                 background: 'linear-gradient(90deg, #4a90ff, #00cfff)',
