@@ -12,36 +12,24 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-base">
-      {/* Ambient orbs */}
-      <div aria-hidden className="pointer-events-none fixed inset-0 z-0">
-        <div style={{
-          position: 'absolute', top: '-10%', left: '-5%',
-          width: '60vw', height: '60vw', borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(124,124,255,0.18) 0%, transparent 65%)',
-          filter: 'blur(80px)',
-        }} />
-        <div style={{
-          position: 'absolute', bottom: '-10%', right: '-5%',
-          width: '55vw', height: '55vw', borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(255,124,77,0.15) 0%, transparent 65%)',
-          filter: 'blur(90px)',
-        }} />
-      </div>
+    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden">
 
       <div className="relative z-10 w-full max-w-sm px-6">
         {/* Logo */}
         <div className="mb-10 text-center">
-          <p className="font-sans text-2xl font-semibold tracking-tight text-primary">
-            Unlock
-            <span style={{
-              background: 'linear-gradient(90deg, var(--player-a), var(--player-b))',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}>X</span>
-          </p>
-          <p className="mt-2 font-mono text-[11px] uppercase tracking-widest text-tertiary">
+          <div className="flex items-center justify-center gap-3 mb-2">
+            <img src="/image.png" alt="UnlockX" width={40} height={40} />
+            <p className="font-sans text-2xl font-semibold tracking-tight text-primary">
+              Unlock
+              <span style={{
+                background: 'linear-gradient(90deg, #4a90ff, #00cfff)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+              }}>X</span>
+            </p>
+          </div>
+          <p className="font-mono text-[11px] uppercase tracking-widest text-tertiary">
             Creator Intelligence
           </p>
         </div>

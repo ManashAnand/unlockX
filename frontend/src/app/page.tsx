@@ -13,6 +13,7 @@ import ToneBreakdown from '@/components/ToneBreakdown'
 import TopicDistribution from '@/components/TopicDistribution'
 import AIInsights from '@/components/AIInsights'
 import VerdictBanner from '@/components/VerdictBanner'
+import AlgorithmPlaybook from '@/components/AlgorithmPlaybook'
 import LoadingState from '@/components/LoadingState'
 import GrowthChart from '@/components/GrowthChart'
 import ComparisonCard, { type ComparisonRow } from '@/components/ComparisonCard'
@@ -96,6 +97,7 @@ function TopComparisons() {
 
 function HomeInner() {
   const { state, compare } = useCompare()
+  const handleCompare = (a: string, b: string, maxPosts: number) => compare(a, b, maxPosts)
   const isLoading = !['idle', 'complete', 'error'].includes(state.step)
   const params = useSearchParams()
   const defaultA = params.get('a') ?? ''
@@ -103,7 +105,7 @@ function HomeInner() {
   const autoTrigger = Boolean(defaultA && defaultB)
 
   return (
-    <div className="min-h-screen bg-base">
+    <div className="min-h-screen">
       <Nav />
       <main className="mx-auto max-w-[1320px] px-8 pb-20 pt-8 max-md:px-4">
 
@@ -149,7 +151,7 @@ function HomeInner() {
             </div>
 
             <CompareBar
-              onCompare={compare}
+              onCompare={handleCompare}
               isLoading={isLoading}
               defaultA={defaultA}
               defaultB={defaultB}
@@ -163,7 +165,7 @@ function HomeInner() {
         {/* CompareBar when not idle */}
         {state.step !== 'idle' && (
           <CompareBar
-            onCompare={compare}
+            onCompare={handleCompare}
             isLoading={isLoading}
             defaultA={defaultA}
             defaultB={defaultB}
@@ -216,6 +218,7 @@ function HomeInner() {
                   playerB={state.result.b}
                 />
                 <VerdictBanner result={state.result} />
+                <AlgorithmPlaybook result={state.result} />
               </>
             )}
           </div>

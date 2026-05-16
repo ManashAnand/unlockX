@@ -6,7 +6,7 @@ from models.schemas import CompareRequest, PlayerData, CompareResult
 from services.scraper import scrape_profile_and_tweets
 from services.analytics import compute_analytics, classify_tones, classify_topics, get_top_tweets
 from services.llm import generate_ai_insights
-from services.cache import get_cached_profile, set_cached_profile
+from services.cache import get_cached_profile, set_cached_profile, get_cached_comparison, set_cached_comparison
 
 router = APIRouter(prefix="/api")
 
@@ -15,13 +15,13 @@ def _sse(event: str, data: dict) -> str:
     return f"event: {event}\ndata: {json.dumps(data)}\n\n"
 
 
-async def _build_player(handle: str) -> tuple[PlayerData, bool]:
+async def _build_player(handle: str, max_items: int = 20) -> tuple[PlayerData, bool]:
     """Returns (player_data, was_cached)."""
     cached = get_cached_profile(handle)
     if cached:
         return cached, True
 
-    profile, tweets = await scrape_profile_and_tweets(handle, max_items=100)
+    profile, tweets = await scrape_profile_and_tweets(handle, max_items=max_items)
     analytics = compute_analytics(profile, tweets)
     tone = classify_tones(tweets)
     topics = classify_topics(tweets)
@@ -39,18 +39,32 @@ async def _build_player(handle: str) -> tuple[PlayerData, bool]:
 
 
 @router.get("/compare/stream")
-async def compare_stream(handle_a: str, handle_b: str):
+async def compare_stream(handle_a: str, handle_b: str, max_posts: int = 20):
     async def generate():
         try:
+            # ── Check full comparison cache first ──────────────────────────────
+            cached_result = await asyncio.to_thread(get_cached_comparison, handle_a, handle_b)
+            if cached_result:
+                yield _sse("status", {"step": "scraping_a", "message": f"Loading cached data…"})
+                yield _sse("profile", {"side": "a", "data": cached_result.a.model_dump(), "cached": True})
+                yield _sse("status", {"step": "done_a", "message": f"{handle_a} loaded from cache ✓"})
+                yield _sse("status", {"step": "scraping_b", "message": f"Loading cached data…"})
+                yield _sse("profile", {"side": "b", "data": cached_result.b.model_dump(), "cached": True})
+                yield _sse("status", {"step": "done_b", "message": f"{handle_b} loaded from cache ✓"})
+                yield _sse("status", {"step": "done_ai", "message": "Analysis complete ✓"})
+                yield _sse("complete", cached_result.model_dump())
+                return
+
+            # ── Fresh run ──────────────────────────────────────────────────────
             # Process A
             yield _sse("status", {"step": "scraping_a", "message": f"Fetching data for {handle_a}…"})
-            player_a, cached_a = await _build_player(handle_a)
+            player_a, cached_a = await _build_player(handle_a, max_posts)
             yield _sse("profile", {"side": "a", "data": player_a.model_dump(), "cached": cached_a})
             yield _sse("status", {"step": "done_a", "message": f"{handle_a} analyzed ✓"})
 
             # Process B
             yield _sse("status", {"step": "scraping_b", "message": f"Fetching data for {handle_b}…"})
-            player_b, cached_b = await _build_player(handle_b)
+            player_b, cached_b = await _build_player(handle_b, max_posts)
             yield _sse("profile", {"side": "b", "data": player_b.model_dump(), "cached": cached_b})
             yield _sse("status", {"step": "done_b", "message": f"{handle_b} analyzed ✓"})
 
@@ -59,8 +73,9 @@ async def compare_stream(handle_a: str, handle_b: str):
             insights = await asyncio.to_thread(generate_ai_insights, player_a, player_b)
             yield _sse("status", {"step": "done_ai", "message": "Analysis complete ✓"})
 
-            # Final result
+            # Final result — save to comparison cache
             result = CompareResult(a=player_a, b=player_b, ai_insights=insights)
+            await asyncio.to_thread(set_cached_comparison, handle_a, handle_b, result)
             yield _sse("complete", result.model_dump())
 
         except Exception as exc:

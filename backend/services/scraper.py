@@ -107,7 +107,7 @@ async def scrape_profile_and_tweets(
                 ))
 
             continuation_token = data.get("continuation_token")
-            if not continuation_token or len(results) < per_page:
+            if not continuation_token:
                 break
 
     if not tweets:

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <defs>
+    <linearGradient id="grad1" x1="0" y1="100" x2="60" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1a3aff"/>
+      <stop offset="100%" stop-color="#00cfff"/>
+    </linearGradient>
+    <linearGradient id="grad2" x1="120" y1="100" x2="60" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0066ff"/>
+      <stop offset="100%" stop-color="#00eeff"/>
+    </linearGradient>
+    <linearGradient id="grad3" x1="0" y1="0" x2="60" y2="60" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#003bcc"/>
+      <stop offset="100%" stop-color="#0055ee"/>
+    </linearGradient>
+  </defs>
+  <!-- Left leg -->
+  <polygon points="18,100 38,100 62,30 45,30" fill="url(#grad1)"/>
+  <!-- Right leg -->
+  <polygon points="102,100 82,100 58,30 75,30" fill="url(#grad2)"/>
+  <!-- Top cap / arrow -->
+  <polygon points="45,30 75,30 60,5" fill="url(#grad2)"/>
+  <!-- Inner shadow plane left -->
+  <polygon points="38,100 52,100 62,65 52,65" fill="url(#grad3)" opacity="0.6"/>
+  <!-- Inner shadow plane right -->
+  <polygon points="82,100 68,100 58,65 68,65" fill="url(#grad3)" opacity="0.6"/>
+</svg>

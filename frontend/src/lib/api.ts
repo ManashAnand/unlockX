@@ -3,11 +3,12 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000'
 export function streamCompare(
   handleA: string,
   handleB: string,
+  maxPosts: number,
   onEvent: (event: string, data: unknown) => void,
   onDone: () => void,
   onError: (err: string) => void,
 ): () => void {
-  const url = `${API_BASE}/api/compare/stream?handle_a=${encodeURIComponent(handleA)}&handle_b=${encodeURIComponent(handleB)}`
+  const url = `${API_BASE}/api/compare/stream?handle_a=${encodeURIComponent(handleA)}&handle_b=${encodeURIComponent(handleB)}&max_posts=${maxPosts}`
   const es = new EventSource(url)
 
   const EVENTS = ['status', 'profile', 'complete', 'error']

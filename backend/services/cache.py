@@ -66,3 +66,46 @@ def set_cached_profile(handle: str, player: PlayerData) -> None:
         }).execute()
     except Exception as e:
         logger.warning("Cache write failed: %s", e)
+
+
+def _normalize_handles(handle_a: str, handle_b: str) -> tuple[str, str]:
+    """Always return handles in alphabetical order so A-B and B-A hit the same cache row."""
+    a = handle_a.lstrip("@").lower()
+    b = handle_b.lstrip("@").lower()
+    return (a, b) if a <= b else (b, a)
+
+
+def get_cached_comparison(handle_a: str, handle_b: str):
+    """Returns the cached CompareResult dict, or None if missing/stale."""
+    from models.schemas import CompareResult
+    sb = _get_supabase()
+    if not sb:
+        return None
+    try:
+        a, b = _normalize_handles(handle_a, handle_b)
+        result = sb.table("comparison_cache").select("*").eq("handle_a", a).eq("handle_b", b).execute()
+        if not result.data:
+            return None
+        row = result.data[0]
+        if not _is_fresh(row["created_at"]):
+            return None
+        return CompareResult(**row["result"])
+    except Exception as e:
+        logger.warning("Comparison cache read failed: %s", e)
+        return None
+
+
+def set_cached_comparison(handle_a: str, handle_b: str, result) -> None:
+    sb = _get_supabase()
+    if not sb:
+        return
+    try:
+        a, b = _normalize_handles(handle_a, handle_b)
+        sb.table("comparison_cache").upsert({
+            "handle_a": a,
+            "handle_b": b,
+            "result": result.model_dump(),
+            "created_at": datetime.now(timezone.utc).isoformat(),
+        }).execute()
+    except Exception as e:
+        logger.warning("Comparison cache write failed: %s", e)

@@ -33,17 +33,24 @@ async function saveComparison(result: CompareResult) {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return
     const winnerHandle = determineWinner(result)
-    await supabase.from('user_comparisons').insert({
+
+    // Normalize order: always store handles sorted alphabetically
+    // so "A vs B" and "B vs A" resolve to the same row
+    const [pa, pb] = [result.a, result.b].sort((x, y) =>
+      x.profile.handle.toLowerCase().localeCompare(y.profile.handle.toLowerCase())
+    )
+
+    await supabase.from('user_comparisons').upsert({
       user_id: user.id,
-      handle_a: result.a.profile.handle,
-      handle_b: result.b.profile.handle,
-      name_a: result.a.profile.name,
-      name_b: result.b.profile.name,
-      followers_a: result.a.profile.followers,
-      followers_b: result.b.profile.followers,
+      handle_a: pa.profile.handle,
+      handle_b: pb.profile.handle,
+      name_a: pa.profile.name,
+      name_b: pb.profile.name,
+      followers_a: pa.profile.followers,
+      followers_b: pb.profile.followers,
       winner_handle: winnerHandle,
-      total_followers: result.a.profile.followers + result.b.profile.followers,
-    })
+      total_followers: pa.profile.followers + pb.profile.followers,
+    }, { onConflict: 'user_id,handle_a,handle_b' })
   } catch {
     // silent — saving is best-effort
   }
@@ -53,13 +60,14 @@ export function useCompare() {
   const [state, setState] = useState<CompareState>(initial)
   const closeRef = useRef<(() => void) | null>(null)
 
-  const compare = useCallback((handleA: string, handleB: string) => {
+  const compare = useCallback((handleA: string, handleB: string, maxPosts = 20) => {
     if (closeRef.current) closeRef.current()
     setState({ ...initial, step: 'scraping_a', message: `Fetching ${handleA}…` })
 
     const close = streamCompare(
       handleA,
       handleB,
+      maxPosts,
       (event, data) => {
         const d = data as Record<string, unknown>
         if (event === 'status') {

@@ -23,7 +23,7 @@ export default function ComparisonsPage() {
   }, [supabase])
 
   return (
-    <div className="min-h-screen bg-base">
+    <div className="min-h-screen">
       <Nav />
       <main className="mx-auto max-w-[1320px] px-8 pb-20 pt-10 max-md:px-4">
 

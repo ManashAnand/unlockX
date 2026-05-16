@@ -23,6 +23,11 @@
   0%, 100% { opacity: 0.18; }
   50% { opacity: 0.28; }
 }
+@keyframes aurora {
+  0%   { transform: scale(1)   rotate(0deg);   opacity: 0.5; }
+  50%  { transform: scale(1.2) rotate(180deg); opacity: 0.8; }
+  100% { transform: scale(1)   rotate(360deg); opacity: 0.5; }
+}
 
 .bar-fill-a {
   background: linear-gradient(270deg, var(--player-a), color-mix(in oklch, var(--player-a), white 20%));

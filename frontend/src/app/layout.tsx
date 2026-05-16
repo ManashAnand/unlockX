@@ -20,53 +20,43 @@ export const metadata: Metadata = {
   },
   twitter: { card: 'summary_large_image', title: 'UnlockX — Twitter Creator Intelligence', description: 'Who grows faster on Twitter? Find out in seconds.', images: ['/og-image.png'], creator: '@unlockx_ai' },
   alternates: { canonical: BASE_URL },
-  icons: { icon: '/favicon.ico', apple: '/apple-touch-icon.png' },
+  icons: { icon: '/image.png', apple: '/image.png' },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
+        <link rel="icon" href="/image.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/image.png" />
         <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebApplication', name: 'UnlockX', description: 'AI-powered side-by-side comparison of any two Twitter/X creators.', url: BASE_URL, applicationCategory: 'AnalyticsApplication', offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' } }) }} />
       </head>
       <body>
-        {/* ── Ambient background ── */}
+        {/* ── Subtle ambient glow ── */}
         <div aria-hidden style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }}>
-          {/* Big indigo bloom — top-left, partly off-screen */}
+          {/* Indigo whisper — top-left */}
           <div style={{
-            position: 'absolute', top: '-20%', left: '-15%',
-            width: '75vw', height: '75vw', borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(124,124,255,0.38) 0%, rgba(100,80,255,0.18) 35%, transparent 65%)',
-            filter: 'blur(50px)',
+            position: 'absolute', top: '-5%', left: '-5%',
+            width: '55vw', height: '55vw', borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(80,80,255,0.13) 0%, transparent 65%)',
+            filter: 'blur(80px)',
+            animation: 'orb-drift-a 20s ease-in-out infinite',
           }} />
-          {/* Big coral bloom — bottom-right, partly off-screen */}
+          {/* Cyan whisper — bottom-right */}
           <div style={{
-            position: 'absolute', bottom: '-20%', right: '-15%',
-            width: '70vw', height: '70vw', borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(255,100,60,0.35) 0%, rgba(255,80,40,0.15) 35%, transparent 65%)',
-            filter: 'blur(55px)',
+            position: 'absolute', bottom: '-5%', right: '-5%',
+            width: '50vw', height: '50vw', borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(0,180,255,0.11) 0%, transparent 65%)',
+            filter: 'blur(90px)',
+            animation: 'orb-drift-b 25s ease-in-out infinite',
           }} />
-          {/* Secondary indigo accent — top-right */}
+          {/* Violet accent — top-right */}
           <div style={{
-            position: 'absolute', top: '5%', right: '-5%',
-            width: '35vw', height: '35vw', borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(140,100,255,0.22) 0%, transparent 65%)',
-            filter: 'blur(40px)',
-          }} />
-          {/* Secondary coral accent — bottom-left */}
-          <div style={{
-            position: 'absolute', bottom: '10%', left: '-5%',
+            position: 'absolute', top: '5%', right: '5%',
             width: '30vw', height: '30vw', borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(255,120,60,0.18) 0%, transparent 65%)',
-            filter: 'blur(45px)',
-          }} />
-          {/* Center subtle indigo haze */}
-          <div style={{
-            position: 'absolute', top: '40%', left: '30%',
-            width: '40vw', height: '25vw', borderRadius: '50%',
-            background: 'radial-gradient(ellipse, rgba(100,100,255,0.08) 0%, transparent 70%)',
-            filter: 'blur(60px)',
+            background: 'radial-gradient(circle, rgba(120,60,255,0.09) 0%, transparent 65%)',
+            filter: 'blur(70px)',
           }} />
         </div>
 
