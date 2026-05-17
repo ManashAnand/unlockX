@@ -70,9 +70,17 @@ function TopComparisons() {
       .from('user_comparisons')
       .select('*')
       .order('total_followers', { ascending: false })
-      .limit(10)
+      .limit(50)
       .then(({ data }) => {
-        setRows(data ?? [])
+        // Deduplicate by handle pair — keep highest-follower row for each unique pair
+        const seen = new Set<string>()
+        const unique = (data ?? []).filter((row) => {
+          const key = [row.handle_a, row.handle_b].sort().join('|')
+          if (seen.has(key)) return false
+          seen.add(key)
+          return true
+        }).slice(0, 10)
+        setRows(unique)
         setLoaded(true)
       })
   }, [supabase])
