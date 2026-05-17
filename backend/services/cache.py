@@ -83,12 +83,23 @@ def get_cached_comparison(handle_a: str, handle_b: str):
         return None
     try:
         a, b = _normalize_handles(handle_a, handle_b)
-        result = sb.table("comparison_cache").select("*").eq("handle_a", a).eq("handle_b", b).execute()
+        # Order by created_at DESC so we always get the freshest row first
+        result = (
+            sb.table("comparison_cache")
+            .select("*")
+            .eq("handle_a", a)
+            .eq("handle_b", b)
+            .order("created_at", desc=True)
+            .limit(1)
+            .execute()
+        )
         if not result.data:
             return None
         row = result.data[0]
         if not _is_fresh(row["created_at"]):
+            logger.info("Comparison cache stale for %s vs %s", a, b)
             return None
+        logger.info("Comparison cache HIT for %s vs %s", a, b)
         return CompareResult(**row["result"])
     except Exception as e:
         logger.warning("Comparison cache read failed: %s", e)
@@ -101,11 +112,15 @@ def set_cached_comparison(handle_a: str, handle_b: str, result) -> None:
         return
     try:
         a, b = _normalize_handles(handle_a, handle_b)
-        sb.table("comparison_cache").upsert({
-            "handle_a": a,
-            "handle_b": b,
-            "result": result.model_dump(),
-            "created_at": datetime.now(timezone.utc).isoformat(),
-        }).execute()
+        sb.table("comparison_cache").upsert(
+            {
+                "handle_a": a,
+                "handle_b": b,
+                "result": result.model_dump(),
+                "created_at": datetime.now(timezone.utc).isoformat(),
+            },
+            on_conflict="handle_a,handle_b",
+        ).execute()
+        logger.info("Comparison cache SET for %s vs %s", a, b)
     except Exception as e:
         logger.warning("Comparison cache write failed: %s", e)
